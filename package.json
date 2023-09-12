@@ -1,0 +1,29 @@
+{
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "mysql2": "^3.6.1"
+  },
+  "name": "smart-attendance-api",
+  "description": "ExpressJs + MySQL backend app for smart attendance system",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VishwaDeAero/Smart-Attendance-API.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VishwaDeAero/Smart-Attendance-API/issues"
+  },
+  "homepage": "https://github.com/VishwaDeAero/Smart-Attendance-API#readme",
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
