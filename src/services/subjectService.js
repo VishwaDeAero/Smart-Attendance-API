@@ -36,8 +36,57 @@ const createSubject = (newSubject) => {
     });
 }
 
+const updateSubject = (id, updatedData) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            // Find the subject by its ID
+            const subject = await Subject.findByPk(id);
+    
+            if (!subject) {
+            reject(new Error('Subject not found'));
+            return;
+            }
+    
+            // Update the subject with the new data
+            await subject.update(updatedData);
+    
+            // Resolve the Promise with the updated subject
+            resolve(subject);
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
+const deleteSubject = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            // Find the subject by its ID
+            const subject = await Subject.findByPk(id);
+    
+            if (!subject) {
+            reject(new Error('Subject not found'));
+            return;
+            }
+    
+            // Update the subject with the new data
+            await subject.update({
+                status: 0,
+                deletedAt: Date.now()
+            });
+    
+            // Resolve the Promise with the updated subject
+            resolve(subject);
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
 module.exports = {
     getAllSubjects,
     getOneSubject,
-    createSubject
+    createSubject,
+    updateSubject,
+    deleteSubject
 }
