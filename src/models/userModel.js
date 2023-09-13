@@ -2,29 +2,29 @@ const { DataTypes } = require('sequelize');
 const {DB} = require("../database/connect");
 
 const User = DB.define('users', {
-  Id: {
+  id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
   },
-  Name: {
+  name: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  Username: {
+  username: {
     type: DataTypes.STRING,
     allowNull: false,
     unique: true,
   },
-  Password: {
+  password: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  Email: {
+  email: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  Status: {
+  status: {
     type: DataTypes.SMALLINT,
     defaultValue: 1,
   },

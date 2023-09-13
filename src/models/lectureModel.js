@@ -4,35 +4,35 @@ const {DB} = require("../database/connect");
 const Subject = require('./subjectModel');
 
 const Lecture = DB.define('lecture', {
-  Id: {
+  id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
   },
-  SubjectId: {
+  subjectId: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  DateTime: {
+  scheduledAt: {
     type: DataTypes.DATE,
     allowNull: false,
   },
-  Duration: {
+  duration: {
     type: DataTypes.DECIMAL(2,2),
     allowNull: false,
   },
-  Location: {
+  location: {
     type: DataTypes.STRING,
   },
-  QRtoken: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  Lecturer: {
+  tokenQR: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  Status: {
+  lecturer: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  status: {
     type: DataTypes.SMALLINT,
     defaultValue: 1
   },
@@ -49,6 +49,6 @@ const Lecture = DB.define('lecture', {
   },
 });
 
-Lecture.belongsTo(Subject, { foreignKey: 'SubjectId' });
+Lecture.belongsTo(Subject, { foreignKey: 'subjectId' });
 
 module.exports = Lecture;

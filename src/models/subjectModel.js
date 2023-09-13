@@ -2,23 +2,23 @@ const DataTypes = require("sequelize");
 const {DB} = require("../database/connect");
 
 const Subject = DB.define('subject', {
-    Id: {
+    id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
-    Name: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    Code: {
+    code: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    Description: {
+    description: {
       type: DataTypes.TEXT,
     },
-    Status: {
+    status: {
       type: DataTypes.SMALLINT,
       defaultValue: 1
     },

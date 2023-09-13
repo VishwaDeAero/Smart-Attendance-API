@@ -2,23 +2,23 @@ const DataTypes = require("sequelize");
 const {DB} = require("../database/connect");
 
 const Student = DB.define('student', {
-    Id: {
+    id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
-    Name: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    IndexNo: {
+    indexNo: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    FaceIdToken: {
+    faceIdToken: {
       type: DataTypes.STRING,
     },
-    Status: {
+    status: {
       type: DataTypes.SMALLINT,
       defaultValue: 1
     },

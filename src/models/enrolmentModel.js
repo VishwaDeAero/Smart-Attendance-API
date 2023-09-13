@@ -5,7 +5,7 @@ const Student = require('./studentModel');
 const Subject = require('./subjectModel');
 
 const Enrolment = DB.define('enrolment', {
-  Id: {
+  id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,

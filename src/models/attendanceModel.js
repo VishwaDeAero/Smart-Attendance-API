@@ -6,20 +6,20 @@ const Subject = require('./subjectModel');
 const Lecture = require('./lectureModel');
 
 const Attendance = DB.define('attendance', {
-  Id: {
+  id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
   },
-  StudentId: {
+  studentId: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  SubjectId: {
+  subjectId: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  LectureId: {
+  lectureId: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
@@ -35,8 +35,8 @@ const Attendance = DB.define('attendance', {
   },
 });
 
-Attendance.belongsTo(Student, { foreignKey: 'StudentId' });
-Attendance.belongsTo(Subject, { foreignKey: 'SubjectId' });
-Attendance.belongsTo(Lecture, { foreignKey: 'LectureId' });
+Attendance.belongsTo(Student, { foreignKey: 'studentId' });
+Attendance.belongsTo(Subject, { foreignKey: 'subjectId' });
+Attendance.belongsTo(Lecture, { foreignKey: 'lectureId' });
 
 module.exports = Attendance;
