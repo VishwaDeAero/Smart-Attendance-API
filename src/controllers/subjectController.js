@@ -43,13 +43,13 @@ const getOneSubject = async (req, res) => {
 const createSubject = async (req, res) => {
     try {
         const { body } = req;
-        const newSubjectt = {
+        const newSubject = {
             name: body.name,
             code: body.code,
             description: body.description,
         };
         // Call the service function to create a subject
-        const subject = await subjectService.createSubject(newSubjectt);
+        const subject = await subjectService.createSubject(newSubject);
         // Handle the data (subject) and send a response
         res.status(200).json({
             status: 'OK',

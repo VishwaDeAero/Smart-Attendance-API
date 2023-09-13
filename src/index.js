@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const bodyParser = require("body-parser");
 
 require('dotenv').config();
 const port = process.env.PORT;
@@ -16,6 +17,7 @@ DB.authenticate().then(() => {
 });
 
 // Routes
+app.use(bodyParser.json());
 app.use("/api/v1/subjects", v1SubjectRouter);
 
 app.get('/', (req, res) => res.send('Smart-Attendance-API'));
