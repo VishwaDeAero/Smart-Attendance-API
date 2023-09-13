@@ -12,6 +12,19 @@ const getAllSubjects = () => {
     });
 }
 
+const getOneSubject = (id) => {
+    return new Promise((resolve, reject) => {
+        Subject.findByPk(id)
+          .then((subject) => {
+            resolve(subject); // Resolve the Promise with the result
+        })
+          .catch((error) => {
+            reject(error); // Reject the Promise with an error if there's a problem
+        });
+    });
+}
+
 module.exports = {
     getAllSubjects,
+    getOneSubject
 }
