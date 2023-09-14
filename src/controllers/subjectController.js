@@ -20,12 +20,12 @@ const getAllSubjects = async (req, res) => {
 
 const getOneSubject = async (req, res) => {
     try {
-        const { params: { workoutId } } = req;
-        if (!workoutId) {
+        const { params: { subjectId } } = req;
+        if (!subjectId) {
             return;
         }
         // Call the service function to get the subject by id
-        const subject = await subjectService.getOneSubject(workoutId);
+        const subject = await subjectService.getOneSubject(subjectId);
         // Handle the data (subject) and send a response
         res.status(200).json({
             status: 'OK',
@@ -66,9 +66,9 @@ const createSubject = async (req, res) => {
 
 const updateSubject = async (req, res) => {
     try {
-        const { params: { workoutId } } = req;
+        const { params: { subjectId } } = req;
         const { body } = req;
-        if (!workoutId) {
+        if (!subjectId) {
             return;
         }
         const updatedData = {
@@ -77,7 +77,7 @@ const updateSubject = async (req, res) => {
             description: body.description,
         };
         // Call the service function to get the subject by id
-        const subject = await subjectService.updateSubject(workoutId, updatedData);
+        const subject = await subjectService.updateSubject(subjectId, updatedData);
         // Handle the data (subject) and send a response
         res.status(200).json({
             status: 'OK',
@@ -94,12 +94,12 @@ const updateSubject = async (req, res) => {
 
 const deleteSubject = async (req, res) => {
     try {
-        const { params: { workoutId } } = req;
-        if (!workoutId) {
+        const { params: { subjectId } } = req;
+        if (!subjectId) {
             return;
         }
         // Call the service function to get the subject by id
-        const subject = await subjectService.deleteSubject(workoutId);
+        const subject = await subjectService.deleteSubject(subjectId);
         // Handle the data (subject) and send a response
         res.status(200).json({
             status: 'OK',

@@ -10,9 +10,9 @@ const {
 } = require('../../controllers/subjectController');
 
 router.get("/", getAllSubjects);
-router.get("/:workoutId", getOneSubject);
+router.get("/:subjectId", getOneSubject);
 router.post("/", createSubject);
-router.patch("/:workoutId", updateSubject);
-router.delete("/:workoutId", deleteSubject);
+router.patch("/:subjectId", updateSubject);
+router.delete("/:subjectId", deleteSubject);
 
 module.exports = router;
