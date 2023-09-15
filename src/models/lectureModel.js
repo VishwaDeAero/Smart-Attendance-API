@@ -18,7 +18,7 @@ const Lecture = DB.define('lecture', {
     allowNull: false,
   },
   duration: {
-    type: DataTypes.DECIMAL(2,2),
+    type: DataTypes.DECIMAL(4,2),
     allowNull: false,
   },
   location: {
