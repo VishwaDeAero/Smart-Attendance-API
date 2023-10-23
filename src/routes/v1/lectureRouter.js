@@ -1,4 +1,5 @@
 const express = require('express');
+const { protected } = require('../../middleware/auth');
 const router = express.Router();
 
 const {
@@ -11,8 +12,8 @@ const {
 
 router.get("/", getAllLectures);
 router.get("/:lectureId", getOneLecture);
-router.post("/", createLecture);
-router.patch("/:lectureId", updateLecture);
-router.delete("/:lectureId", deleteLecture);
+router.post("/", protected, createLecture);
+router.patch("/:lectureId", protected, updateLecture);
+router.delete("/:lectureId", protected, deleteLecture);
 
 module.exports = router;
