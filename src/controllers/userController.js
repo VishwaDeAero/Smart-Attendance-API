@@ -37,7 +37,10 @@ const loginUser = async (req, res) => {
             if (user.password === currentUser.password) {
                 // Handle the data (user) and send a response
                 const secretKey = process.env.SECRET_KEY;
-                const token = jwt.sign({ username: user.username }, secretKey, { expiresIn: '1h' });
+                const token = jwt.sign({
+                    id: user.id,
+                    username: user.username 
+                }, secretKey, { expiresIn: '1h' });
                 res.status(200).json({
                     status: 'OK',
                     token: token,
