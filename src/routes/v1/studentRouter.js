@@ -4,6 +4,7 @@ const router = express.Router();
 
 const {
     getAllStudents,
+    loginStudent,
     getOneStudent,
     createStudent,
     updateStudent,
@@ -12,6 +13,7 @@ const {
 
 router.get("/", getAllStudents);
 router.get("/:studentId", getOneStudent);
+router.post("/login/", loginStudent);
 router.post("/", protected, createStudent);
 router.patch("/:studentId", protected, updateStudent);
 router.delete("/:studentId", protected, deleteStudent);

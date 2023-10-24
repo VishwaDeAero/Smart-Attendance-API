@@ -16,6 +16,22 @@ const getAllStudents = () => {
     });
 }
 
+const getStudentByFaceIdToken = (faceIdToken) => {
+    return new Promise((resolve, reject) => {
+        Student.findOne({
+            // Find by faceIdToken
+            where: {
+                faceIdToken: faceIdToken,
+            },})
+          .then((student) => {
+            resolve(student); // Resolve the Promise with the result
+        })
+          .catch((error) => {
+            reject(error); // Reject the Promise with an error if there's a problem
+        });
+    });
+}
+
 const getOneStudent = (id) => {
     return new Promise((resolve, reject) => {
         Student.findByPk(id)
@@ -89,6 +105,7 @@ const deleteStudent = (id) => {
 
 module.exports = {
     getAllStudents,
+    getStudentByFaceIdToken,
     getOneStudent,
     createStudent,
     updateStudent,

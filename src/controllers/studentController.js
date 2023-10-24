@@ -1,4 +1,5 @@
 const studentService = require('../services/studentService');
+const jwt = require('jsonwebtoken');
 
 const getAllStudents = async (req, res) => {
     try {
@@ -9,6 +10,42 @@ const getAllStudents = async (req, res) => {
             status: 'OK',
             data: students
         });
+    } catch (error) {
+        // Handle errors and send an error response
+        res.status(500).json({
+            error: 'Internal server error',
+            details: error
+        });
+    }
+};
+
+const loginStudent = async (req, res) => {
+    try {
+        const { body } = req;
+        const currentStudent = {
+            faceIdToken: body.faceIdToken,
+        };
+        // Call the service function to get the student by faceIdToken
+        const student = await studentService.getStudentByFaceIdToken(currentStudent.faceIdToken);
+        if(!student){
+            res.status(400).json({
+                status: 'FAIL',
+                error: 'Student recognize failed'
+            });
+        }else{
+            // Handle the data (student) and send a response
+            const secretKey = process.env.STUDENT_SECRET_KEY;
+            const token = jwt.sign({
+                id: student.id,
+                name: student.name, 
+                indexNo: student.indexNo,
+            }, secretKey, { expiresIn: '1h' });
+            res.status(200).json({
+                status: 'OK',
+                token: token,
+                data: student
+            });
+        }
     } catch (error) {
         // Handle errors and send an error response
         res.status(500).json({
@@ -116,6 +153,7 @@ const deleteStudent = async (req, res) => {
 
 module.exports = {
     getAllStudents,
+    loginStudent,
     getOneStudent,
     createStudent,
     updateStudent,
