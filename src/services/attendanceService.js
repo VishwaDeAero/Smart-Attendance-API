@@ -1,0 +1,96 @@
+const Attendance = require('../models/attendanceModel')
+
+const getAllAttendances = () => {
+    return new Promise((resolve, reject) => {
+        Attendance.findAll({
+            // Removes Soft Deletes from View
+            where: {
+              deletedAt: null,
+            },})
+          .then((attendances) => {
+            resolve(attendances); // Resolve the Promise with the result
+        })
+          .catch((error) => {
+            reject(error); // Reject the Promise with an error if there's a problem
+        });
+    });
+}
+
+const getOneAttendance = (id) => {
+    return new Promise((resolve, reject) => {
+        Attendance.findByPk(id)
+          .then((attendance) => {
+            resolve(attendance); // Resolve the Promise with the result
+        })
+          .catch((error) => {
+            reject(error); // Reject the Promise with an error if there's a problem
+        });
+    });
+}
+
+const createAttendance = (newAttendance) => {
+    return new Promise((resolve, reject) => {
+        Attendance.create(newAttendance)
+          .then((attendance) => {
+            resolve(attendance); // Resolve the Promise with the result
+        })
+          .catch((error) => {
+            reject(error); // Reject the Promise with an error if there's a problem
+        });
+    });
+}
+
+const updateAttendance = (id, updatedData) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            // Find the Attendance by its ID
+            const attendance = await Attendance.findByPk(id);
+    
+            if (!attendance) {
+            reject(new Error('Attendance not found'));
+            return;
+            }
+    
+            // Update the Attendance with the new data
+            await attendance.update(updatedData);
+    
+            // Resolve the Promise with the updated Attendance
+            resolve(attendance);
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
+const deleteAttendance = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            // Find the Attendance by its ID
+            const attendance = await Attendance.findByPk(id);
+    
+            if (!attendance) {
+            reject(new Error('Attendance not found'));
+            return;
+            }
+    
+            // Soft delete attendance
+            await attendance.update({
+                status: 0,
+                deletedAt: Date.now()
+            });
+    
+            // Resolve the Promise with the updated Attendance
+            resolve(attendance);
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
+module.exports = {
+    getAllAttendances,
+    getOneAttendance,
+    createAttendance,
+    updateAttendance,
+    deleteAttendance
+}
