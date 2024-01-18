@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 require('dotenv').config();
 const port = process.env.PORT;
 
-const {DB} = require('./database/connect');
+const { DB } = require('./database/connect');
 
 // Routes
 const v1SubjectRouter = require('./routes/v1/subjectRouter');
@@ -18,6 +18,14 @@ DB.authenticate().then(() => {
     console.log('Connection has been established successfully.');
 }).catch((error) => {
     console.error('Unable to connect to the database: ', error);
+    process.exit(1);
+});
+
+// If you want to handle unhandled rejections as well
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+    // You can choose to exit the process here
+    process.exit(1);
 });
 
 // Routes
