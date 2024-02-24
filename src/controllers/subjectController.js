@@ -75,6 +75,7 @@ const updateSubject = async (req, res) => {
             name: body.name,
             code: body.code,
             description: body.description,
+            status: body.status,
         };
         // Call the service function to get the subject by id
         const subject = await subjectService.updateSubject(subjectId, updatedData);
