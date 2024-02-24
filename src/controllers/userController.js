@@ -118,7 +118,7 @@ const updateUser = async (req, res) => {
         }
         const updatedData = {
             name: body.name,
-            username: body.code,
+            username: body.username,
             password: body.password,
             email: body.email,
             status: body.status
