@@ -112,6 +112,7 @@ const updateStudent = async (req, res) => {
             name: body.name,
             indexNo: body.indexNo,
             faceIdToken: body.faceIdToken,
+            status: body.status
         };
         // Call the service function to get the Student by id
         const student = await studentService.updateStudent(studentId, updatedData);
