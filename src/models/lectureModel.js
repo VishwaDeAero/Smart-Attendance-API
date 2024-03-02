@@ -24,10 +24,6 @@ const Lecture = DB.define('lecture', {
   location: {
     type: DataTypes.STRING,
   },
-  tokenQR: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
   lecturer: {
     type: DataTypes.STRING,
     allowNull: false,

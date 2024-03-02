@@ -74,7 +74,6 @@ const createLecture = async (req, res) => {
             scheduledAt: body.scheduledAt,
             duration: body.duration,
             location: body.location,
-            tokenQR: body.tokenQR,
             lecturer: body.lecturer,
         };
         // Call the service function to create a Lecture
@@ -105,7 +104,6 @@ const updateLecture = async (req, res) => {
             scheduledAt: body.scheduledAt,
             duration: body.duration,
             location: body.location,
-            tokenQR: body.tokenQR,
             lecturer: body.lecturer,
             status: body.status,
         };
