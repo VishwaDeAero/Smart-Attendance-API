@@ -1,4 +1,5 @@
-const Lecture = require('../models/lectureModel')
+const Lecture = require('../models/lectureModel');
+const Subject = require('../models/subjectModel');
 
 const getAllLectures = () => {
     return new Promise((resolve, reject) => {
@@ -6,7 +7,9 @@ const getAllLectures = () => {
             // Removes Soft Deletes from View
             where: {
               deletedAt: null,
-            },})
+            },
+            include: Subject,
+        })
           .then((lectures) => {
             resolve(lectures); // Resolve the Promise with the result
         })
