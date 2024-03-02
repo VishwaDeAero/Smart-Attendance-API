@@ -12,8 +12,8 @@ const {
 
 router.get("/", getAllLectures);
 router.get("/:lectureId", getOneLecture);
-router.post("/", protected, createLecture);
-router.patch("/:lectureId", protected, updateLecture);
-router.delete("/:lectureId", protected, deleteLecture);
+router.post("/", protected(['lecturer']), createLecture);
+router.patch("/:lectureId", protected(['lecturer']), updateLecture);
+router.delete("/:lectureId", protected(['lecturer']), deleteLecture);
 
 module.exports = router;

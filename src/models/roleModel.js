@@ -1,8 +1,7 @@
 const { DataTypes } = require('sequelize');
 const {DB} = require("../database/connect");
-const Role = require('./roleModel');
 
-const User = DB.define('users', {
+const Role = DB.define('roles', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -11,23 +10,6 @@ const User = DB.define('users', {
   name: {
     type: DataTypes.STRING,
     allowNull: false,
-  },
-  username: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
-  },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  roleId: {
-    type: DataTypes.SMALLINT,
-    // allowNull: false,
   },
   status: {
     type: DataTypes.SMALLINT,
@@ -46,6 +28,4 @@ const User = DB.define('users', {
   },
 });
 
-User.belongsTo(Role, { foreignKey: 'roleId' });
-
-module.exports = User;
+module.exports = Role;

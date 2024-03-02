@@ -1,3 +1,4 @@
+const Role = require('../models/roleModel');
 const User = require('../models/userModel')
 
 const getAllUsers = () => {
@@ -30,7 +31,9 @@ const getUserByUsername = (username) => {
             // Find by username
             where: {
               username: username,
-            },})
+            },
+            include: Role,
+        })
           .then((user) => {
             resolve(user); // Resolve the Promise with the result
         })
