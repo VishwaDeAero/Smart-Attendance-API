@@ -2,7 +2,6 @@ const { DataTypes } = require('sequelize');
 const {DB} = require("../database/connect");
 
 const Student = require('./studentModel');
-const Subject = require('./subjectModel');
 const Lecture = require('./lectureModel');
 
 const Attendance = DB.define('attendance', {
