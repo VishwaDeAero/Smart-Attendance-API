@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const bodyParser = require("body-parser");
+const cors = require('cors');
 
 require('dotenv').config();
 const port = process.env.PORT;
@@ -28,6 +29,8 @@ process.on('unhandledRejection', (reason, promise) => {
     process.exit(1);
 });
 
+// Enable CORS for all requests
+app.use(cors());
 // Routes
 app.use(bodyParser.json());
 app.use("/api/v1/subjects", v1SubjectRouter);
