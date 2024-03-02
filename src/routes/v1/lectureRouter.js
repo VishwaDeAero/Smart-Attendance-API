@@ -5,6 +5,7 @@ const router = express.Router();
 const {
     getAllLectures,
     getOneLecture,
+    generateLectureQR,
     createLecture,
     updateLecture,
     deleteLecture 
@@ -15,5 +16,6 @@ router.get("/:lectureId", getOneLecture);
 router.post("/", protected(['lecturer']), createLecture);
 router.patch("/:lectureId", protected(['lecturer']), updateLecture);
 router.delete("/:lectureId", protected(['lecturer']), deleteLecture);
+router.get("/qrtoken/:lectureId", generateLectureQR);
 
 module.exports = router;
