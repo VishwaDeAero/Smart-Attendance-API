@@ -15,10 +15,6 @@ const Attendance = DB.define('attendance', {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  subjectId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
   lectureId: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -36,7 +32,6 @@ const Attendance = DB.define('attendance', {
 });
 
 Attendance.belongsTo(Student, { foreignKey: 'studentId' });
-Attendance.belongsTo(Subject, { foreignKey: 'subjectId' });
 Attendance.belongsTo(Lecture, { foreignKey: 'lectureId' });
 
 module.exports = Attendance;

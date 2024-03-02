@@ -6,6 +6,7 @@ const {
     getAllAttendances,
     getOneAttendance,
     markAttendance,
+    addAttendance,
     updateAttendance,
     deleteAttendance
 } = require('../../controllers/attendanceController');
@@ -13,6 +14,7 @@ const {
 router.get("/", getAllAttendances);
 router.get("/:attendanceId", getOneAttendance);
 router.post("/", studentOnly, markAttendance);
+router.post("/add", addAttendance);
 router.patch("/:attendanceId", protected, updateAttendance);
 router.delete("/:attendanceId", protected, deleteAttendance);
 
