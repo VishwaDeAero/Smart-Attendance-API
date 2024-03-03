@@ -1,5 +1,6 @@
 const attendanceService = require('../services/attendanceService')
 const moment = require('moment')
+const jwt = require('jsonwebtoken');
 
 const getAllAttendances = async (req, res) => {
     try {
@@ -43,11 +44,22 @@ const getOneAttendance = async (req, res) => {
 
 const markAttendance = async (req, res) => {
     try {
+        const secretKey = process.env.SECRET_KEY;
         const { body } = req
+        const lectureToken = body.lectureToken;
+        var lectureId = null;
+        jwt.verify(lectureToken, secretKey, (err, decoded) => {
+            if (err) {
+                console.log("findLecture2",err)
+                return res.status(401).json({ error: 'Lecture Token is not valid' });
+            }
+            lectureId = decoded.id;
+        });
+        
         const newAttendance = {
             studentId: req.student.id,
-            lectureId: body.lectureId,
-            deviceData: body.deviceData,
+            lectureId: lectureId,
+            deviceData: 'body.deviceData',
             attendedAt: moment()
         }
         // Call the service function to mark attendance
@@ -59,6 +71,7 @@ const markAttendance = async (req, res) => {
         })
     } catch (error) {
         // Handle errors and send an error response
+        console.log("Server Error", error)
         res.status(500).json({
             error: 'Internal server error',
             details: error
