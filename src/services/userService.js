@@ -3,7 +3,13 @@ const User = require('../models/userModel')
 
 const getAllUsers = () => {
     return new Promise((resolve, reject) => {
-        User.findAll()
+        User.findAll({
+            // Removes Soft Deletes from View
+            where: {
+              deletedAt: null,
+            },
+            include: Role,
+        })
           .then((users) => {
             resolve(users); // Resolve the Promise with the result
         })
