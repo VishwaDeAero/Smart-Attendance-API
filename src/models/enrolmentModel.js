@@ -31,7 +31,4 @@ const Enrolment = DB.define('enrolment', {
   },
 });
 
-Enrolment.belongsTo(Student, { foreignKey: 'studentId' });
-Enrolment.belongsTo(Subject, { foreignKey: 'subjectId' });
-
 module.exports = Enrolment;
