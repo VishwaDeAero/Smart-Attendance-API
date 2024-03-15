@@ -22,18 +22,19 @@ const getAllUsers = async (req, res) => {
 const loginUser = async (req, res) => {
     try {
         const { body } = req;
+        console.log(body)
         const currentUser = {
             username: body.username,
             password: body.password
         };
         // Call the service function to get the user by id
         const user = await userService.getUserByUsername(currentUser.username);
-        if(!user){
+        if (!user) {
             res.status(400).json({
                 status: 'FAIL',
                 error: 'User not found'
             });
-        }else{
+        } else {
             if (user.password === currentUser.password) {
                 // Handle the data (user) and send a response
                 const secretKey = process.env.SECRET_KEY;
@@ -46,7 +47,7 @@ const loginUser = async (req, res) => {
                     status: 'OK',
                     token: token,
                     expiresIn: 3600,
-                    data: user
+                    user: user
                 });
             } else {
                 res.status(400).json({
@@ -94,6 +95,7 @@ const createUser = async (req, res) => {
             username: body.username,
             password: body.password,
             email: body.email,
+            roleId: body.roleId,
         };
         // Call the service function to create a user
         const user = await userService.createUser(newUser);
@@ -113,6 +115,7 @@ const createUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
     try {
+        console.log("User Data:",req.body)
         const { params: { userId } } = req;
         const { body } = req;
         if (!userId) {
@@ -121,10 +124,17 @@ const updateUser = async (req, res) => {
         const updatedData = {
             name: body.name,
             username: body.username,
-            password: body.password,
             email: body.email,
+            roleId: body.roleId,
             status: body.status
         };
+        if(body.password){
+            updatedData = {
+                ...updatedData,
+                password: body.password,
+            }
+        }
+
         // Call the service function to get the user by id
         const user = await userService.updateUser(userId, updatedData);
         // Handle the data (user) and send a response

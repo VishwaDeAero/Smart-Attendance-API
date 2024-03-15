@@ -1,12 +1,14 @@
 const jwt = require('jsonwebtoken');
 
 const protected = (requiredRoles) => async (req, res, next) => {
-  const token = req.get('x-api-key');
   const secretKey = process.env.SECRET_KEY;
-
-  if (!token) {
-    return res.status(401).json({ error: 'Unauthorized' });
+  const authHeader = req.headers['authorization'];
+  
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ message: 'Unauthorized' });
   }
+
+  const token = authHeader.split(' ')[1];
 
   jwt.verify(token, secretKey, (err, decoded) => {
     if (err) {
@@ -17,7 +19,7 @@ const protected = (requiredRoles) => async (req, res, next) => {
     req.user = decoded;
 
     // Check if the user's role has permission to access the route
-    const userRole = req.user.Role.name;
+    const userRole = req.user.role;
     if (!requiredRoles.includes(userRole)) {
       return res.status(403).json({ error: 'Access forbidden' });
     }
