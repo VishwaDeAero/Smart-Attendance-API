@@ -47,7 +47,11 @@ const loginUser = async (req, res) => {
                     status: 'OK',
                     token: token,
                     expiresIn: 3600,
-                    user: user
+                    user: {
+                        username: user.username,
+                        email: user.email,
+                        role: user.role
+                    }
                 });
             } else {
                 res.status(400).json({

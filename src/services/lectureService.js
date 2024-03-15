@@ -1,5 +1,6 @@
 const Lecture = require('../models/lectureModel');
 const Subject = require('../models/subjectModel');
+const User = require('../models/userModel');
 
 const getAllLectures = () => {
     return new Promise((resolve, reject) => {
@@ -8,7 +9,7 @@ const getAllLectures = () => {
             where: {
               deletedAt: null,
             },
-            include: Subject,
+            include: [Subject,User],
         })
           .then((lectures) => {
             resolve(lectures); // Resolve the Promise with the result
