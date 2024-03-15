@@ -6,28 +6,31 @@ const getAllUsers = () => {
         User.findAll({
             // Removes Soft Deletes from View
             where: {
-              deletedAt: null,
+                deletedAt: null,
             },
+            attributes: { exclude: ['password'] },
             include: Role,
         })
-          .then((users) => {
-            resolve(users); // Resolve the Promise with the result
-        })
-          .catch((error) => {
-            reject(error); // Reject the Promise with an error if there's a problem
-        });
+            .then((users) => {
+                resolve(users); // Resolve the Promise with the result
+            })
+            .catch((error) => {
+                reject(error); // Reject the Promise with an error if there's a problem
+            });
     });
 }
 
 const getOneUser = (id) => {
     return new Promise((resolve, reject) => {
-        User.findByPk(id)
-          .then((user) => {
-            resolve(user); // Resolve the Promise with the result
+        User.findByPk(id, {
+            attributes: { exclude: ['password'] }
         })
-          .catch((error) => {
-            reject(error); // Reject the Promise with an error if there's a problem
-        });
+            .then((user) => {
+                resolve(user); // Resolve the Promise with the result
+            })
+            .catch((error) => {
+                reject(error); // Reject the Promise with an error if there's a problem
+            });
     });
 }
 
@@ -36,28 +39,28 @@ const getUserByUsername = (username) => {
         User.findOne({
             // Find by username
             where: {
-              username: username,
+                username: username,
             },
             include: Role,
         })
-          .then((user) => {
-            resolve(user); // Resolve the Promise with the result
-        })
-          .catch((error) => {
-            reject(error); // Reject the Promise with an error if there's a problem
-        });
+            .then((user) => {
+                resolve(user); // Resolve the Promise with the result
+            })
+            .catch((error) => {
+                reject(error); // Reject the Promise with an error if there's a problem
+            });
     });
 }
 
 const createUser = (newUser) => {
     return new Promise((resolve, reject) => {
         User.create(newUser)
-          .then((user) => {
-            resolve(user); // Resolve the Promise with the result
-        })
-          .catch((error) => {
-            reject(error); // Reject the Promise with an error if there's a problem
-        });
+            .then((user) => {
+                resolve(user); // Resolve the Promise with the result
+            })
+            .catch((error) => {
+                reject(error); // Reject the Promise with an error if there's a problem
+            });
     });
 }
 
@@ -66,15 +69,15 @@ const updateUser = (id, updatedData) => {
         try {
             // Find the User by its ID
             const user = await User.findByPk(id);
-    
+
             if (!user) {
-            reject(new Error('User not found'));
-            return;
+                reject(new Error('User not found'));
+                return;
             }
-    
+
             // Update the user with the new data
             await user.update(updatedData);
-    
+
             // Resolve the Promise with the updated user
             resolve(user);
         } catch (error) {
@@ -88,15 +91,19 @@ const deleteUser = (id) => {
         try {
             // Find the user by its ID
             const user = await User.findByPk(id);
-    
+
             if (!user) {
-            reject(new Error('User not found'));
-            return;
+                reject(new Error('User not found'));
+                return;
             }
-    
+
             // Update the user with the new data
-            await user.destroy();
-    
+            // await user.destroy();
+            await user.update({
+                status: 0,
+                deletedAt: Date.now()
+            });
+
             // Resolve the Promise with the updated user
             resolve(user);
         } catch (error) {

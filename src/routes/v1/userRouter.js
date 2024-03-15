@@ -14,8 +14,8 @@ const {
 router.get("/", getAllUsers);
 router.get("/:userId", getOneUser);
 router.post("/login/", loginUser);
-router.post("/", protected, createUser);
-router.patch("/:userId", protected, updateUser);
-router.delete("/:userId", protected, deleteUser);
+router.post("/", protected(['Administrator']), createUser);
+router.patch("/:userId", protected(['Administrator']), updateUser);
+router.delete("/:userId", protected(['Administrator']), deleteUser);
 
 module.exports = router;
