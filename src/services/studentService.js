@@ -25,6 +25,24 @@ const getAllStudents = () => {
     });
 }
 
+const getAllStudentsFaceIds = () => {
+    return new Promise((resolve, reject) => {
+        Student.findAll({
+            attributes: ['id', 'faceIdToken'],
+            // Removes Soft Deletes from View
+            where: {
+                deletedAt: null,
+            },
+        })
+            .then((students) => {
+                resolve(students); // Resolve the Promise with the result
+            })
+            .catch((error) => {
+                reject(error); // Reject the Promise with an error if there's a problem
+            });
+    });
+}
+
 const getStudentByFaceIdToken = (faceIdToken) => {
     return new Promise((resolve, reject) => {
         Student.findOne({
@@ -115,6 +133,7 @@ const deleteStudent = (id) => {
 
 module.exports = {
     getAllStudents,
+    getAllStudentsFaceIds,
     getStudentByFaceIdToken,
     getOneStudent,
     createStudent,

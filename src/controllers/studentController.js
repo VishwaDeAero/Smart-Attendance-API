@@ -22,11 +22,22 @@ const getAllStudents = async (req, res) => {
 const loginStudent = async (req, res) => {
     try {
         const { body } = req;
-        const currentStudent = {
-            faceIdToken: body.faceIdToken,
-        };
+        const currentFace = body.faceIdToken;
+
+        var students = await studentService.getAllStudentsFaceIds();
+        let studentData = students.map(student => {
+            return {
+                id: student.id,
+                faceIdToken: atob(student.faceIdToken)
+            };
+        });
+
+        let results = calculateEuclideanDistance(studentData, currentFace);
+        console.log("results", results)
+
         // Call the service function to get the student by faceIdToken
-        const student = await studentService.getStudentByFaceIdToken(currentStudent.faceIdToken);
+        const student = await studentService.getOneStudent(results.id);
+
         if(!student){
             res.status(400).json({
                 status: 'FAIL',
@@ -42,18 +53,43 @@ const loginStudent = async (req, res) => {
             }, secretKey, { expiresIn: '1h' });
             res.status(200).json({
                 status: 'OK',
+                face_difference: results.distance,
                 token: token,
                 data: student
             });
         }
     } catch (error) {
         // Handle errors and send an error response
+        console.log(error)
         res.status(500).json({
             error: 'Internal server error',
             details: error
         });
     }
 };
+
+function calculateEuclideanDistance(studentData, faceData) {
+    let emb = JSON.parse(faceData);
+    let minDistance = -5;
+    let closestId = null;
+
+    for (const item of studentData) {
+        const knownEmb = item.faceIdToken.split(',').map(parseFloat);
+        let distance = 0;
+        for (let i = 0; i < emb.length; i++) {
+            const diff = emb[i] - knownEmb[i];
+            distance += diff * diff;
+        }
+        distance = Math.sqrt(distance);
+
+        if (minDistance == -5 || distance < minDistance) {
+            minDistance = distance;
+            closestId = item.id;
+        }
+    }
+
+    return { id: closestId, distance: minDistance };
+}
 
 const getOneStudent = async (req, res) => {
     try {
@@ -80,10 +116,12 @@ const getOneStudent = async (req, res) => {
 const createStudent = async (req, res) => {
     try {
         const { body } = req;
+        let faceIdToken = btoa(body.faceIdToken);
+        console.log(faceIdToken)
         const newStudent = {
             name: body.name,
             indexNo: body.indexNo,
-            faceIdToken: body.faceIdToken,
+            faceIdToken: faceIdToken,
         };
         // Call the service function to create a Student
         const student = await studentService.createStudent(newStudent);
