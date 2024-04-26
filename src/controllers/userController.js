@@ -22,7 +22,6 @@ const getAllUsers = async (req, res) => {
 const loginUser = async (req, res) => {
     try {
         const { body } = req;
-        console.log(body)
         const currentUser = {
             username: body.username,
             password: body.password

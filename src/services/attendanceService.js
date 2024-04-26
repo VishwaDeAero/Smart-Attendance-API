@@ -32,6 +32,20 @@ const getOneAttendance = (id) => {
     });
 }
 
+const getAttendanceByStudentLecture = (studentId, lectureId) => {
+    return new Promise((resolve, reject) => {
+        Attendance.findOne({
+            where: { studentId, lectureId }
+        })
+            .then((attendance) => {
+                resolve(attendance); // Resolve the Promise with the result
+            })
+            .catch((error) => {
+                reject(error); // Reject the Promise with an error if there's a problem
+            });
+    });
+}
+
 const createAttendance = (newAttendance) => {
     return new Promise((resolve, reject) => {
         Attendance.create(newAttendance)
@@ -94,6 +108,7 @@ const deleteAttendance = (id) => {
 module.exports = {
     getAllAttendances,
     getOneAttendance,
+    getAttendanceByStudentLecture,
     createAttendance,
     updateAttendance,
     deleteAttendance

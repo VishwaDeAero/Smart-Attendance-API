@@ -1,9 +1,6 @@
 const { DataTypes } = require('sequelize');
 const {DB} = require("../database/connect");
 
-const Student = require('./studentModel');
-const Subject = require('./subjectModel');
-
 const Enrolment = DB.define('enrolment', {
   id: {
     type: DataTypes.INTEGER,
