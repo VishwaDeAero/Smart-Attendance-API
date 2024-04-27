@@ -11,6 +11,7 @@ const Lecture = require('./models/lectureModel');
 const Subject = require('./models/subjectModel');
 const Student = require('./models/studentModel');
 const User = require('./models/userModel');
+const Notification = require('./models/notificationModel');
 
 DB.sync({alter:true}).then(() => {
     console.log('DB sync successfully.');

@@ -16,7 +16,7 @@ const Student = DB.define('student', {
       allowNull: false,
     },
     faceIdToken: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
     },
     status: {
       type: DataTypes.SMALLINT,

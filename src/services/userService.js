@@ -1,5 +1,7 @@
 const Role = require('../models/roleModel');
-const User = require('../models/userModel')
+const User = require('../models/userModel');
+
+User.belongsTo(Role);
 
 const getAllUsers = () => {
     return new Promise((resolve, reject) => {

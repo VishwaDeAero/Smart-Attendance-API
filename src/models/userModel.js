@@ -27,7 +27,7 @@ const User = DB.define('users', {
   },
   roleId: {
     type: DataTypes.SMALLINT,
-    // allowNull: false,
+    allowNull: false,
   },
   status: {
     type: DataTypes.SMALLINT,
@@ -46,6 +46,6 @@ const User = DB.define('users', {
   },
 });
 
-User.belongsTo(Role, { foreignKey: 'roleId' });
+Role.belongsTo(User);
 
 module.exports = User;
