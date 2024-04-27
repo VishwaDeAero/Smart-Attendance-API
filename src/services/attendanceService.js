@@ -46,6 +46,21 @@ const getAttendanceByStudentLecture = (studentId, lectureId) => {
     });
 }
 
+const getAttendanceByLecture = (lectureId) => {
+    return new Promise((resolve, reject) => {
+        Attendance.findAll({
+            where: { lectureId },
+            include: { model: Student },
+        })
+            .then((attendance) => {
+                resolve(attendance); // Resolve the Promise with the result
+            })
+            .catch((error) => {
+                reject(error); // Reject the Promise with an error if there's a problem
+            });
+    });
+}
+
 const createAttendance = (newAttendance) => {
     return new Promise((resolve, reject) => {
         Attendance.create(newAttendance)
@@ -109,6 +124,7 @@ module.exports = {
     getAllAttendances,
     getOneAttendance,
     getAttendanceByStudentLecture,
+    getAttendanceByLecture,
     createAttendance,
     updateAttendance,
     deleteAttendance

@@ -5,10 +5,9 @@ const attendanceService = require('../services/attendanceService');
 const getStudentAttendance = async (req, res) => {
     try {
         const { body } = req;
-        console.log(body)
-        const studentId = body.student_id;
-        const startDate = (body.start_date) ? new Date(body.start_date) : new Date(0);
-        const endDate = (body.end_date) ? new Date(body.end_date) : new Date();
+        const studentId = body.studentId;
+        const startDate = (body.startDate) ? new Date(body.startDate) : new Date(0);
+        const endDate = (body.endDate) ? new Date(body.endDate) : new Date();
 
         // Get student enrolled subjects
         let enrolments = await enrolmentService.getEnrolledSubjects(studentId);
@@ -47,6 +46,43 @@ const getStudentAttendance = async (req, res) => {
     }
 };
 
+const getLectureAttendance = async (req, res) => {
+    try {
+        const { body } = req;
+        const lectureId = body.lectureId;
+        const subjectId = body.subjectId;
+
+        // Get student enrolled subjects
+        let enrolments = await enrolmentService.getEnrolledStudents(subjectId);
+
+        // Get attenedance of lecture
+        const attendances = await Promise.all(enrolments.map(async (enrolment) => {
+            const attendance = await attendanceService.getAttendanceByStudentLecture(enrolment.studentId, lectureId);
+            const studentData = {
+                id: enrolment.student.id,
+                name: enrolment.student.name,
+                indexNo: enrolment.student.indexNo,
+                attendedAt: (attendance) ? attendance.attendedAt : null
+            }
+            return studentData; // Return the modified lecture object
+        }));
+
+
+        res.status(200).json({
+            status: 'OK',
+            data: attendances
+        });
+    } catch (error) {
+        // Handle errors and send an error response
+        console.log(error)
+        res.status(500).json({
+            error: 'Internal server error',
+            details: error
+        });
+    }
+};
+
 module.exports = {
-    getStudentAttendance
+    getStudentAttendance,
+    getLectureAttendance
 }

@@ -41,6 +41,28 @@ const getOneLecture = async (req, res) => {
     }
 };
 
+const getLectureBySubject = async (req, res) => {
+    try {
+        const { params: { subjectId } } = req;
+        if (!subjectId) {
+            return;
+        }
+        // Call the service function to get the Lecture by id
+        const lectures = await LectureService.getAllLecturesBySubject(subjectId);
+        // Handle the data (Lecture) and send a response
+        res.status(200).json({
+            status: 'OK',
+            data: lectures
+        });
+    } catch (error) {
+        // Handle errors and send an error response
+        res.status(500).json({
+            error: 'Internal server error',
+            details: error
+        });
+    }
+};
+
 const generateLectureQR = async (req, res) => {
     try {
         const { params: { lectureId } } = req;
@@ -148,6 +170,7 @@ const deleteLecture = async (req, res) => {
 module.exports = {
     getAllLectures,
     getOneLecture,
+    getLectureBySubject,
     generateLectureQR,
     createLecture,
     updateLecture,
