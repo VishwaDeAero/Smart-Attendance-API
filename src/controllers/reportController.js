@@ -5,9 +5,10 @@ const attendanceService = require('../services/attendanceService');
 const getStudentAttendance = async (req, res) => {
     try {
         const { body } = req;
+        console.log(body)
         const studentId = body.student_id;
-        const startDate = (body.start_date) ? body.start_date : new Date();
-        const endDate = (body.end_date) ? body.end_date : new Date();
+        const startDate = (body.start_date) ? new Date(body.start_date) : new Date(0);
+        const endDate = (body.end_date) ? new Date(body.end_date) : new Date();
 
         // Get student enrolled subjects
         let enrolments = await enrolmentService.getEnrolledSubjects(studentId);
@@ -17,6 +18,7 @@ const getStudentAttendance = async (req, res) => {
             return subjectLectures;
         }));
         const lectures = enrolmentsData.flat();
+
         // Get attenedance of student
         const attendances = await Promise.all(lectures.map(async (lecture) => {
             const attendance = await attendanceService.getAttendanceByStudentLecture(studentId, lecture.id);
@@ -24,10 +26,16 @@ const getStudentAttendance = async (req, res) => {
             return lecture; // Return the modified lecture object
         }));
 
+        // Filter Lecture Attendance by Date
+        const filteredAttendances = attendances.filter(lecture => {
+            const scheduledAt = new Date(lecture.dataValues.scheduledAt);
+            return scheduledAt > startDate && scheduledAt <= endDate;
+        });
+
 
         res.status(200).json({
             status: 'OK',
-            data: attendances
+            data: filteredAttendances
         });
     } catch (error) {
         // Handle errors and send an error response
