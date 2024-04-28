@@ -117,7 +117,6 @@ const createStudent = async (req, res) => {
     try {
         const { body } = req;
         let faceIdToken = btoa(body.faceIdToken);
-        console.log(faceIdToken)
         const newStudent = {
             name: body.name,
             indexNo: body.indexNo,
