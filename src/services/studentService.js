@@ -9,7 +9,10 @@ const getAllStudents = () => {
         Student.findAll({
             include: [{
                 model: Subject,
-                through: { attributes: [] } // Exclude enrollment attributes from the result
+                through: { 
+                    model: Enrolment,
+                    where: { deletedAt: null }, // Include only enrolments where deletedAt is null
+                },
             }],
             // Removes Soft Deletes from View
             where: {
