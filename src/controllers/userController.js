@@ -34,7 +34,7 @@ const loginUser = async (req, res) => {
                 error: 'User not found'
             });
         } else {
-            if (user.password === currentUser.password) {
+            if (atob(user.password) === currentUser.password) {
                 // Handle the data (user) and send a response
                 const secretKey = process.env.SECRET_KEY;
                 const token = jwt.sign({
@@ -96,7 +96,7 @@ const createUser = async (req, res) => {
         const newUser = {
             name: body.name,
             username: body.username,
-            password: body.password,
+            password: btoa(body.password),
             email: body.email,
             roleId: body.roleId,
         };
@@ -118,13 +118,12 @@ const createUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
     try {
-        console.log("User Data:",req.body)
         const { params: { userId } } = req;
         const { body } = req;
         if (!userId) {
             return;
         }
-        const updatedData = {
+        let updatedData = {
             name: body.name,
             username: body.username,
             email: body.email,
@@ -132,9 +131,10 @@ const updateUser = async (req, res) => {
             status: body.status
         };
         if(body.password){
+            let encpassword = btoa(body.password);
             updatedData = {
                 ...updatedData,
-                password: body.password,
+                password: encpassword,
             }
         }
 
@@ -147,6 +147,7 @@ const updateUser = async (req, res) => {
         });
     } catch (error) {
         // Handle errors and send an error response
+        console.log('Update User Error', error)
         res.status(500).json({
             error: 'Internal server error',
             details: error
