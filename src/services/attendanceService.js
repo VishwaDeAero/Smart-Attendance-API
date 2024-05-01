@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const Attendance = require('../models/attendanceModel');
 const Lecture = require('../models/lectureModel');
 const Student = require('../models/studentModel');
@@ -51,6 +52,28 @@ const getAttendanceByLecture = (lectureId) => {
         Attendance.findAll({
             where: { lectureId },
             include: { model: Student },
+        })
+            .then((attendance) => {
+                resolve(attendance); // Resolve the Promise with the result
+            })
+            .catch((error) => {
+                reject(error); // Reject the Promise with an error if there's a problem
+            });
+    });
+}
+
+const getAttendanceByDate = (startDate, endDate) => {
+    return new Promise((resolve, reject) => {
+        Attendance.findAll({
+            where: {
+                attendedAt: {
+                    [Op.between]: [startDate, endDate] // Filter lectures where scheduledAt falls within the given date range
+                },
+            },
+            include: { 
+                model: Student,
+                attributes: [ 'id', 'name' ],
+            },
         })
             .then((attendance) => {
                 resolve(attendance); // Resolve the Promise with the result
@@ -125,6 +148,7 @@ module.exports = {
     getOneAttendance,
     getAttendanceByStudentLecture,
     getAttendanceByLecture,
+    getAttendanceByDate,
     createAttendance,
     updateAttendance,
     deleteAttendance

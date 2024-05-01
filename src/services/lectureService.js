@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const Lecture = require('../models/lectureModel');
 const Subject = require('../models/subjectModel');
 const User = require('../models/userModel');
@@ -26,6 +27,27 @@ const getAllLecturesBySubject = (subjectId) => {
             // Removes Soft Deletes from View
             where: {
                 subjectId,
+                deletedAt: null,
+            },
+            include: [Subject],
+        })
+            .then((lectures) => {
+                resolve(lectures); // Resolve the Promise with the result
+            })
+            .catch((error) => {
+                reject(error); // Reject the Promise with an error if there's a problem
+            });
+    });
+}
+
+const getLecturesByDate = (startDate, endDate) => {
+    return new Promise((resolve, reject) => {
+        Lecture.findAll({
+            // Removes Soft Deletes from View
+            where: {
+                scheduledAt: {
+                    [Op.between]: [startDate, endDate] // Filter lectures where scheduledAt falls within the given date range
+                },
                 deletedAt: null,
             },
             include: [Subject],
@@ -114,6 +136,7 @@ module.exports = {
     getAllLectures,
     getOneLecture,
     getAllLecturesBySubject,
+    getLecturesByDate,
     createLecture,
     updateLecture,
     deleteLecture
