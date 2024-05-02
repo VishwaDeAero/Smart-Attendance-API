@@ -16,6 +16,8 @@ const v1UserRouter = require('./routes/v1/userRouter');
 const v1RoleRouter = require('./routes/v1/roleRouter');
 const v1AttendanceRouter = require('./routes/v1/attendanceRouter');
 const v1ReportRouter = require('./routes/v1/reportRouter');
+const v1EnrolmentRouter = require('./routes/v1/enrolmentRouter');
+const v1AnalyticsRouter = require('./routes/v1/analyticsRouter');
 
 DB.authenticate().then(() => {
     console.log('Connection has been established successfully.');
@@ -42,6 +44,8 @@ app.use("/api/v1/users", v1UserRouter);
 app.use("/api/v1/roles", v1RoleRouter);
 app.use("/api/v1/attendances", v1AttendanceRouter);
 app.use("/api/v1/reports", v1ReportRouter);
+app.use("/api/v1/enrolments", v1EnrolmentRouter);
+app.use("/api/v1/analytics", v1AnalyticsRouter);
 
 app.get('/', (req, res) => res.send('Smart-Attendance-API'));
 app.listen(port, () => console.log(`Attendace API app listening on port ${port}!`));

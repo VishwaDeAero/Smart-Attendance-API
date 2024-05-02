@@ -36,14 +36,10 @@ const loginStudent = async (req, res) => {
         console.log("results", results)
 
         // Call the service function to get the student by faceIdToken
-        const student = await studentService.getOneStudent(results.id);
+        if(results.distance <= 0.3){
+            console.log("HIT")
+            const student = await studentService.getOneStudent(results.id);
 
-        if(!student){
-            res.status(400).json({
-                status: 'FAIL',
-                error: 'Student recognize failed'
-            });
-        }else{
             // Handle the data (student) and send a response
             const secretKey = process.env.STUDENT_SECRET_KEY;
             const token = jwt.sign({
@@ -56,6 +52,11 @@ const loginStudent = async (req, res) => {
                 face_difference: results.distance,
                 token: token,
                 data: student
+            });
+        }else{
+            res.status(200).json({
+                status: 'FAIL',
+                error: 'No Matching Students Found'
             });
         }
     } catch (error) {
