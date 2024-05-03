@@ -6,7 +6,6 @@ const jwt = require('jsonwebtoken');
 
 const getAllAttendances = async (req, res) => {
     try {
-        console.log("Student Only:",req.student);
         // Call the service function to get all attendances
         const attendances = await attendanceService.getAllAttendances()
         // Handle the data (attendances) and send a response
@@ -94,28 +93,66 @@ const markAttendance = async (req, res) => {
         const secretKey = process.env.SECRET_KEY;
         const { body } = req
         const lectureToken = body.lectureToken;
-        const studentId = (req.student.id)?  req.student.id : null;
+        const studentId = (req.student.id) ? req.student.id : null;
         var lectureId = null;
+        const attendedAt = moment();
+
         jwt.verify(lectureToken, secretKey, (err, decoded) => {
             if (err) {
-                console.log("findLecture2",err)
-                return res.status(401).json({ error: 'Lecture Token is not valid' });
+                console.log('Lecture Token Error', err)
+                return res.status(401).json({
+                    error: 'Lecture Token is not valid',
+                    details: err
+                });
             }
             lectureId = decoded.id;
         });
 
         // check Attendance duplicates
         const duplicates = await attendanceService.getAttendanceByStudentLecture(studentId, lectureId);
-
-        if(duplicates){
-            res.status(200).json({
+        if (duplicates) {
+            return res.status(200).json({
                 status: 'FAIL',
                 details: 'Attendance Already Marked',
                 data: duplicates,
-            })
-            return;
+            });
         }
-        
+
+        const lectureDetails = await lectureService.getOneLecture(lectureId);
+        // check Date validation
+        if (lectureDetails) {
+            const scheduledAt = moment(lectureDetails.dataValues.scheduledAt);
+            const duration = parseFloat(lectureDetails.dataValues.duration); // Duration in hours
+
+            // Calculate the start time and end time based on scheduledAt and duration
+            const startTime = scheduledAt.clone().subtract(1, 'hour'); // One hour before scheduledAt
+            const endTime = scheduledAt.clone().add(duration, 'hours'); // Duration hours after scheduledAt
+
+            // Check if the current datetime is within the specified range
+            if (!attendedAt.isBetween(startTime, endTime)) {
+                return res.status(200).json({
+                    status: 'FAIL',
+                    details: 'Attendance is not within the lecture time',
+                    data: lectureDetails,
+                });
+            }
+        }
+
+        // Validation of Enrolled Subject Lectures
+        const enrolledSubjects = await enrolmentService.getEnrolledSubjects(studentId);
+        if (enrolledSubjects) {
+            const subjectList = enrolledSubjects.map((subject) => {
+                return subject.dataValues.subjectId;
+            });
+            if (!subjectList.includes(lectureDetails.dataValues.subjectId)) {
+                return res.status(200).json({
+                    status: 'FAIL',
+                    details: 'You are not enrolled for this Lecture',
+                    data: lectureDetails,
+                });
+            }
+        }
+
         const newAttendance = {
             studentId: req.student.id,
             lectureId: lectureId,
