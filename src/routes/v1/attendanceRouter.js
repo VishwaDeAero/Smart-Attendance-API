@@ -8,10 +8,12 @@ const {
     markAttendance,
     addAttendance,
     updateAttendance,
-    deleteAttendance
+    deleteAttendance,
+    getStudentAttendance
 } = require('../../controllers/attendanceController');
 
 router.get("/", getAllAttendances);
+router.get("/student", studentOnly, getStudentAttendance);
 router.get("/:attendanceId", getOneAttendance);
 router.post("/", studentOnly, markAttendance);
 router.post("/add", addAttendance);

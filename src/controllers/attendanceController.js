@@ -1,9 +1,12 @@
+const enrolmentService = require('../services/enrolmentService');
+const lectureService = require('../services/lectureService');
 const attendanceService = require('../services/attendanceService')
 const moment = require('moment')
 const jwt = require('jsonwebtoken');
 
 const getAllAttendances = async (req, res) => {
     try {
+        console.log("Student Only:",req.student);
         // Call the service function to get all attendances
         const attendances = await attendanceService.getAllAttendances()
         // Handle the data (attendances) and send a response
@@ -19,6 +22,50 @@ const getAllAttendances = async (req, res) => {
         })
     }
 }
+
+const getStudentAttendance = async (req, res) => {
+    try {
+        const { body } = req;
+        const studentId = req.student.id;
+        const startDate = (body.startDate) ? new Date(body.startDate) : new Date(0);
+        const endDate = (body.endDate) ? new Date(body.endDate) : new Date();
+
+        // Get student enrolled subjects
+        let enrolments = await enrolmentService.getEnrolledSubjects(studentId);
+        // Get lectures of student's subject
+        const enrolmentsData = await Promise.all(enrolments.map(async enrolment => {
+            const subjectLectures = await lectureService.getAllLecturesBySubject(enrolment.subjectId);
+            return subjectLectures;
+        }));
+        const lectures = enrolmentsData.flat();
+
+        // Get attenedance of student
+        const attendances = await Promise.all(lectures.map(async (lecture) => {
+            const attendance = await attendanceService.getAttendanceByStudentLecture(studentId, lecture.id);
+            lecture.dataValues.attendedAt = (attendance) ? attendance.attendedAt : null;
+            return lecture; // Return the modified lecture object
+        }));
+
+        // Filter Lecture Attendance by Date
+        const filteredAttendances = attendances.filter(lecture => {
+            const scheduledAt = new Date(lecture.dataValues.scheduledAt);
+            return scheduledAt > startDate && scheduledAt <= endDate;
+        });
+
+
+        res.status(200).json({
+            status: 'OK',
+            data: filteredAttendances
+        });
+    } catch (error) {
+        // Handle errors and send an error response
+        console.log(error)
+        res.status(500).json({
+            error: 'Internal server error',
+            details: error
+        });
+    }
+};
 
 const getOneAttendance = async (req, res) => {
     try {
@@ -47,6 +94,7 @@ const markAttendance = async (req, res) => {
         const secretKey = process.env.SECRET_KEY;
         const { body } = req
         const lectureToken = body.lectureToken;
+        const studentId = (req.student.id)?  req.student.id : null;
         var lectureId = null;
         jwt.verify(lectureToken, secretKey, (err, decoded) => {
             if (err) {
@@ -55,6 +103,18 @@ const markAttendance = async (req, res) => {
             }
             lectureId = decoded.id;
         });
+
+        // check Attendance duplicates
+        const duplicates = await attendanceService.getAttendanceByStudentLecture(studentId, lectureId);
+
+        if(duplicates){
+            res.status(200).json({
+                status: 'FAIL',
+                details: 'Attendance Already Marked',
+                data: duplicates,
+            })
+            return;
+        }
         
         const newAttendance = {
             studentId: req.student.id,
@@ -67,7 +127,7 @@ const markAttendance = async (req, res) => {
         // Handle the data (attendance) and send a response
         res.status(200).json({
             status: 'OK',
-            data: attendance
+            data: attendance,
         })
     } catch (error) {
         // Handle errors and send an error response
@@ -157,6 +217,7 @@ const deleteAttendance = async (req, res) => {
 
 module.exports = {
     getAllAttendances,
+    getStudentAttendance,
     getOneAttendance,
     markAttendance,
     addAttendance,
