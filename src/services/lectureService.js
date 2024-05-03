@@ -29,7 +29,7 @@ const getAllLecturesBySubject = (subjectId) => {
                 subjectId,
                 deletedAt: null,
             },
-            include: [Subject],
+            include: [Subject, User],
         })
             .then((lectures) => {
                 resolve(lectures); // Resolve the Promise with the result
