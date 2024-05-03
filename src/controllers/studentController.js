@@ -36,8 +36,7 @@ const loginStudent = async (req, res) => {
         console.log("results", results)
 
         // Call the service function to get the student by faceIdToken
-        if(results.distance <= 0.3){
-            console.log("HIT")
+        if(results.distance <= 0.4){
             const student = await studentService.getOneStudent(results.id);
 
             // Handle the data (student) and send a response
