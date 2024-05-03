@@ -47,6 +47,7 @@ const loginUser = async (req, res) => {
                     token: token,
                     expiresIn: 3600,
                     user: {
+                        id: user.id,
                         username: user.username,
                         email: user.email,
                         role: user.role
