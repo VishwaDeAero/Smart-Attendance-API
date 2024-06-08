@@ -183,8 +183,54 @@ const addAttendance = async (req, res) => {
             studentId: body.studentId,
             lectureId: body.lectureId,
             deviceData: 'Admin Account',
-            attendedAt: body.attendedAt
+            attendedAt: moment(body.attendedAt)
         }
+
+        // check Attendance duplicates
+        const duplicates = await attendanceService.getAttendanceByStudentLecture(newAttendance.studentId, newAttendance.lectureId);
+        if (duplicates) {
+            return res.status(200).json({
+                status: 'FAIL',
+                details: 'Attendance Already Marked',
+                data: duplicates,
+            });
+        }
+
+        const lectureDetails = await lectureService.getOneLecture(newAttendance.lectureId);
+        // check Date validation
+        if (lectureDetails) {
+            const scheduledAt = moment(lectureDetails.dataValues.scheduledAt);
+            const duration = parseFloat(lectureDetails.dataValues.duration); // Duration in hours
+
+            // Calculate the start time and end time based on scheduledAt and duration
+            const startTime = scheduledAt.clone().subtract(1, 'hour'); // One hour before scheduledAt
+            const endTime = scheduledAt.clone().add(duration, 'hours'); // Duration hours after scheduledAt
+
+            // Check if the current datetime is within the specified range
+            if (!(newAttendance.attendedAt).isBetween(startTime, endTime)) {
+                return res.status(200).json({
+                    status: 'FAIL',
+                    details: 'Attendance is not within the lecture time',
+                    data: lectureDetails,
+                });
+            }
+        }
+
+        // Validation of Enrolled Subject Lectures
+        const enrolledSubjects = await enrolmentService.getEnrolledSubjects(newAttendance.studentId);
+        if (enrolledSubjects) {
+            const subjectList = enrolledSubjects.map((subject) => {
+                return subject.dataValues.subjectId;
+            });
+            if (!subjectList.includes(lectureDetails.dataValues.subjectId)) {
+                return res.status(200).json({
+                    status: 'FAIL',
+                    details: 'You are not enrolled for this Lecture',
+                    data: lectureDetails,
+                });
+            }
+        }
+
         // Call the service function to mark attendance
         const attendance = await attendanceService.createAttendance(newAttendance)
         // Handle the data (attendance) and send a response
