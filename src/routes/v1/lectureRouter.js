@@ -16,10 +16,13 @@ const {
 router.get("/", getAllLectures);
 router.get("/upcoming", studentOnly, getAllUpcomingLectures);
 router.get("/:lectureId", getOneLecture);
-router.post("/", protected(['lecturer']), createLecture);
-router.patch("/:lectureId", protected(['lecturer']), updateLecture);
-router.delete("/:lectureId", protected(['lecturer']), deleteLecture);
 router.get("/subject/:subjectId", getLectureBySubject);
 router.get("/qrtoken/:lectureId", generateLectureQR);
+router.post("/", createLecture);
+router.patch("/:lectureId", updateLecture);
+router.delete("/:lectureId", deleteLecture);
+// router.post("/", protected(['lecturer']), createLecture);
+// router.patch("/:lectureId", protected(['lecturer']), updateLecture);
+// router.delete("/:lectureId", protected(['lecturer']), deleteLecture);
 
 module.exports = router;

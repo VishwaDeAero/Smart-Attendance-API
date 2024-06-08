@@ -12,8 +12,11 @@ const {
 
 router.get("/", getAllSubjects);
 router.get("/:subjectId", getOneSubject);
-router.post("/", protected, createSubject);
-router.patch("/:subjectId", protected, updateSubject);
-router.delete("/:subjectId", protected, deleteSubject);
+router.post("/", createSubject);
+router.patch("/:subjectId", updateSubject);
+router.delete("/:subjectId", deleteSubject);
+// router.post("/", protected, createSubject);
+// router.patch("/:subjectId", protected, updateSubject);
+// router.delete("/:subjectId", protected, deleteSubject);
 
 module.exports = router;
