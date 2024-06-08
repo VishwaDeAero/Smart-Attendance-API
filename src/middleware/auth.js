@@ -40,7 +40,10 @@ const studentOnly = (req, res, next) => {
 
   jwt.verify(token, secretKey, (err, decoded) => {
     if (err) {
-      return res.status(401).json({ error: 'Token is not valid' });
+      return res.status(401).json({ 
+        error: 'Token is not valid',
+        details: 'Token is not valid'
+      });
     }
 
     // If the token is valid, you can add the student data to the request object for later use
