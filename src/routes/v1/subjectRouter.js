@@ -1,4 +1,5 @@
 const express = require('express');
+const { protected } = require('../../middleware/auth');
 const router = express.Router();
 
 const {
@@ -10,9 +11,12 @@ const {
 } = require('../../controllers/subjectController');
 
 router.get("/", getAllSubjects);
-router.get("/:workoutId", getOneSubject);
+router.get("/:subjectId", getOneSubject);
 router.post("/", createSubject);
-router.patch("/:workoutId", updateSubject);
-router.delete("/:workoutId", deleteSubject);
+router.patch("/:subjectId", updateSubject);
+router.delete("/:subjectId", deleteSubject);
+// router.post("/", protected, createSubject);
+// router.patch("/:subjectId", protected, updateSubject);
+// router.delete("/:subjectId", protected, deleteSubject);
 
 module.exports = router;

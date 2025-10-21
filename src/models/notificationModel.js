@@ -1,31 +1,26 @@
 const { DataTypes } = require('sequelize');
 const {DB} = require("../database/connect");
 
-const Enrolment = DB.define('enrolment', {
+const Notification = DB.define('notifications', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
   },
-  studentId: {
-    type: DataTypes.INTEGER,
+  data: {
+    type: DataTypes.STRING,
     allowNull: false,
   },
-  subjectId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
+  url: {
+    type: DataTypes.STRING,
   },
   createdAt: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
   },
-  updatedAt: {
-    type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW,
-  },
-  deletedAt: {
+  viewedAt: {
     type: DataTypes.DATE,
   },
 });
 
-module.exports = Enrolment;
+module.exports = Notification;

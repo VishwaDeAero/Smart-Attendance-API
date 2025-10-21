@@ -1,13 +1,13 @@
-const subjectService = require('../services/subjectService');
+const roleService = require('../services/roleService');
 
-const getAllSubjects = async (req, res) => {
+const getAllRoles = async (req, res) => {
     try {
-        // Call the service function to get all subjects
-        const subjects = await subjectService.getAllSubjects();
-        // Handle the data (subjects) and send a response
+        // Call the service function to get all roles
+        const roles = await roleService.getAllRoles();
+        // Handle the data (roles) and send a response
         res.status(200).json({
             status: 'OK',
-            data: subjects
+            data: roles
         });
     } catch (error) {
         // Handle errors and send an error response
@@ -18,18 +18,18 @@ const getAllSubjects = async (req, res) => {
     }
 };
 
-const getOneSubject = async (req, res) => {
+const getOneRole = async (req, res) => {
     try {
-        const { params: { subjectId } } = req;
-        if (!subjectId) {
+        const { params: { roleId } } = req;
+        if (!roleId) {
             return;
         }
-        // Call the service function to get the subject by id
-        const subject = await subjectService.getOneSubject(subjectId);
-        // Handle the data (subject) and send a response
+        // Call the service function to get the role by id
+        const role = await roleService.getOneRole(roleId);
+        // Handle the data (role) and send a response
         res.status(200).json({
             status: 'OK',
-            data: subject
+            data: role
         });
     } catch (error) {
         // Handle errors and send an error response
@@ -40,20 +40,20 @@ const getOneSubject = async (req, res) => {
     }
 };
 
-const createSubject = async (req, res) => {
+const createRole = async (req, res) => {
     try {
         const { body } = req;
-        const newSubject = {
+        const newRole = {
             name: body.name,
             code: body.code,
             description: body.description,
         };
-        // Call the service function to create a subject
-        const subject = await subjectService.createSubject(newSubject);
-        // Handle the data (subject) and send a response
+        // Call the service function to create a role
+        const role = await roleService.createRole(newRole);
+        // Handle the data (role) and send a response
         res.status(200).json({
             status: 'OK',
-            data: subject
+            data: role
         });
     } catch (error) {
         // Handle errors and send an error response
@@ -64,11 +64,11 @@ const createSubject = async (req, res) => {
     }
 };
 
-const updateSubject = async (req, res) => {
+const updateRole = async (req, res) => {
     try {
-        const { params: { subjectId } } = req;
+        const { params: { roleId } } = req;
         const { body } = req;
-        if (!subjectId) {
+        if (!roleId) {
             return;
         }
         const updatedData = {
@@ -77,12 +77,12 @@ const updateSubject = async (req, res) => {
             description: body.description,
             status: body.status,
         };
-        // Call the service function to get the subject by id
-        const subject = await subjectService.updateSubject(subjectId, updatedData);
-        // Handle the data (subject) and send a response
+        // Call the service function to get the role by id
+        const role = await roleService.updateRole(roleId, updatedData);
+        // Handle the data (role) and send a response
         res.status(200).json({
             status: 'OK',
-            data: subject
+            data: role
         });
     } catch (error) {
         // Handle errors and send an error response
@@ -93,18 +93,18 @@ const updateSubject = async (req, res) => {
     }
 };
 
-const deleteSubject = async (req, res) => {
+const deleteRole = async (req, res) => {
     try {
-        const { params: { subjectId } } = req;
-        if (!subjectId) {
+        const { params: { roleId } } = req;
+        if (!roleId) {
             return;
         }
-        // Call the service function to get the subject by id
-        const subject = await subjectService.deleteSubject(subjectId);
-        // Handle the data (subject) and send a response
+        // Call the service function to get the role by id
+        const role = await roleService.deleteRole(roleId);
+        // Handle the data (role) and send a response
         res.status(200).json({
             status: 'OK',
-            data: subject
+            data: role
         });
     } catch (error) {
         // Handle errors and send an error response
@@ -116,9 +116,9 @@ const deleteSubject = async (req, res) => {
 };
 
 module.exports = {
-    getAllSubjects,
-    getOneSubject,
-    createSubject,
-    updateSubject,
-    deleteSubject
+    getAllRoles,
+    getOneRole,
+    createRole,
+    updateRole,
+    deleteRole
 }

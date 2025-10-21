@@ -2,7 +2,6 @@ const { DataTypes } = require('sequelize');
 const {DB} = require("../database/connect");
 
 const Student = require('./studentModel');
-const Subject = require('./subjectModel');
 const Lecture = require('./lectureModel');
 
 const Attendance = DB.define('attendance', {
@@ -12,10 +11,6 @@ const Attendance = DB.define('attendance', {
     autoIncrement: true,
   },
   studentId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  subjectId: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
@@ -36,7 +31,6 @@ const Attendance = DB.define('attendance', {
 });
 
 Attendance.belongsTo(Student, { foreignKey: 'studentId' });
-Attendance.belongsTo(Subject, { foreignKey: 'subjectId' });
 Attendance.belongsTo(Lecture, { foreignKey: 'lectureId' });
 
 module.exports = Attendance;

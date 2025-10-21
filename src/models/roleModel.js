@@ -1,19 +1,19 @@
 const { DataTypes } = require('sequelize');
 const {DB} = require("../database/connect");
 
-const Enrolment = DB.define('enrolment', {
+const Role = DB.define('roles', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
   },
-  studentId: {
-    type: DataTypes.INTEGER,
+  name: {
+    type: DataTypes.STRING,
     allowNull: false,
   },
-  subjectId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
+  status: {
+    type: DataTypes.SMALLINT,
+    defaultValue: 1,
   },
   createdAt: {
     type: DataTypes.DATE,
@@ -28,4 +28,4 @@ const Enrolment = DB.define('enrolment', {
   },
 });
 
-module.exports = Enrolment;
+module.exports = Role;

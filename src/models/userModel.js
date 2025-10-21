@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const {DB} = require("../database/connect");
+const Role = require('./roleModel');
 
 const User = DB.define('users', {
   id: {
@@ -24,6 +25,10 @@ const User = DB.define('users', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  roleId: {
+    type: DataTypes.SMALLINT,
+    allowNull: false,
+  },
   status: {
     type: DataTypes.SMALLINT,
     defaultValue: 1,
@@ -40,5 +45,7 @@ const User = DB.define('users', {
     type: DataTypes.DATE,
   },
 });
+
+Role.belongsTo(User);
 
 module.exports = User;

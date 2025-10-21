@@ -2,6 +2,7 @@ const { DataTypes } = require('sequelize');
 const {DB} = require("../database/connect");
 
 const Subject = require('./subjectModel');
+const User = require('./userModel');
 
 const Lecture = DB.define('lecture', {
   id: {
@@ -18,18 +19,14 @@ const Lecture = DB.define('lecture', {
     allowNull: false,
   },
   duration: {
-    type: DataTypes.DECIMAL(2,2),
+    type: DataTypes.DECIMAL(4,2),
     allowNull: false,
   },
   location: {
     type: DataTypes.STRING,
   },
-  tokenQR: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  lecturer: {
-    type: DataTypes.STRING,
+  lecturerId: {
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
   status: {
@@ -50,5 +47,6 @@ const Lecture = DB.define('lecture', {
 });
 
 Lecture.belongsTo(Subject, { foreignKey: 'subjectId' });
+Lecture.belongsTo(User, { foreignKey: 'lecturerId' });
 
 module.exports = Lecture;
